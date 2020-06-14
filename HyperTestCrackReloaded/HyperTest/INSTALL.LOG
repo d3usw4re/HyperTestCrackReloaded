@@ -1,0 +1,21 @@
+[CreateDirs]
+C:\Program Files\HyperTest=
+C:\WINDOWS\Profiles\01\Главное меню\Программы\HyperTest=
+
+[CopyFiles]
+C:\Program Files\HyperTest\linux.ask=
+C:\Program Files\HyperTest\logic.ask=
+C:\Program Files\HyperTest\HyperTest.exe=
+C:\Program Files\HyperTest\register.frm=
+C:\Program Files\HyperTest\HyperTest.ini=
+C:\Program Files\HyperTest\license.txt=
+C:\Program Files\HyperTest\readme.txt=
+C:\Program Files\HyperTest\WhatsNew.txt=
+
+[Shortcuts]
+C:\WINDOWS\Profiles\01\Главное меню\Программы\HyperTest\HyperTest=
+C:\WINDOWS\Profiles\01\Главное меню\Программы\HyperTest\О программе=
+
+[CreateKeys]
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\HyperTest v1.0a bugfix2=
+
