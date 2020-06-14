@@ -1,5 +1,5 @@
 # HyperTestCrackReloaded
-Mempatcher for HyperTest
+Mempatcher for HyperTest (For test purpouses only)
 
 ## Step 1
 Open HyperTest and HyperTest Crack
