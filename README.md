@@ -19,7 +19,7 @@ Then press "Yes(Да)" in MsgBox
 
 ![alt text](https://github.com/d3usw4re/HyperTestCrackReloaded/blob/master/img/step4.PNG?raw=true)
 ## Step 5
-When MsgBox with asterisk appeared, press Patch mem with specified result
+When Info MsgBox appeared, press Patch mem with specified result
 
 ![alt text](https://github.com/d3usw4re/HyperTestCrackReloaded/blob/master/img/step5.PNG?raw=true)
 ## Step 6
