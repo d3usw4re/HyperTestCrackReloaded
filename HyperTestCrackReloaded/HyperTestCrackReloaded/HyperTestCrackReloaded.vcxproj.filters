@@ -24,7 +24,7 @@
     <ClInclude Include="MainWindow.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="CoreFunc.h">
+    <ClInclude Include="MemPatcher.h">
       <Filter>Headers</Filter>
     </ClInclude>
   </ItemGroup>
@@ -40,10 +40,10 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Code</Filter>
     </ClCompile>
-    <ClCompile Include="Form1.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Code</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="MemPatcher.cpp">
       <Filter>Code</Filter>
     </ClCompile>
   </ItemGroup>

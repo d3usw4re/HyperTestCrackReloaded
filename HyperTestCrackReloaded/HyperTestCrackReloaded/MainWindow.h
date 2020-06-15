@@ -1,6 +1,6 @@
 #pragma once
 #include <windows.h>
-#include "CoreFunc.h"
+#include "MemPatcher.h"
 
 namespace HyperTestCrackReloaded {
 
@@ -134,8 +134,8 @@ namespace HyperTestCrackReloaded {
 			 uintptr_t moduleBase = 0;
 	
 	private: System::Void hookBtn_Click(System::Object^ sender, System::EventArgs^  e) {
-		procId = GetProcId(L"HyperTest.exe");
-		moduleBase = GetModuleBaseAddress(procId, L"HyperTest.exe");
+		procId = MemPatcher::GetProcId(L"HyperTest.exe");
+		moduleBase = MemPatcher::GetModuleBaseAddress(procId, L"HyperTest.exe");
 		if (procId == 0 && moduleBase == 0) MessageBoxA(static_cast<HWND>(this->Handle.ToPointer()), "Unable to hook! Check if HyperTest is running", "ERROR", MB_ICONERROR | MB_OK);
 		else {
 			hookBtn->Enabled = false;
@@ -146,7 +146,7 @@ namespace HyperTestCrackReloaded {
 	}
 	private: System::Void patchMemBtn_Click(System::Object^ sender, System::EventArgs^  e) {
 		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, procId);
-		uintptr_t dynamicPtrBaseAddr = moduleBase + HYPERTEST_SCORE_MEM;
+		uintptr_t dynamicPtrBaseAddr = moduleBase + HYPERTEST_SCORE_ADDR;
 		double newScore = resultTrackBar->Value;
 		if(WriteProcessMemory(hProcess, reinterpret_cast<LPVOID>(dynamicPtrBaseAddr), &newScore, sizeof(newScore), nullptr) != 0)
 			MessageBoxA(static_cast<HWND>(this->Handle.ToPointer()), "Memory patched! Press OK in HyperTest", "SUCCESS", MB_ICONASTERISK | MB_OK);
