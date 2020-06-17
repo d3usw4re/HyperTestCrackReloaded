@@ -178,13 +178,6 @@ namespace HyperTestCrackReloaded {
 		double newScore = resultTrackBarValue;
 		if (WriteProcessMemory(hProcess, reinterpret_cast<LPVOID>(dynamicPtrBaseAddr), &newScore, sizeof(newScore), nullptr) == 0)
 			MessageBoxA(0, "Unable to patch memory!", "ERROR", MB_ICONERROR | MB_OK | MB_TOPMOST);
-
-		HWND completeBox = NULL;
-		while (completeBox == NULL) {
-			Sleep(50);
-			completeBox = FindWindowEx(NULL, NULL, L"#32770", L"Результат");
-		}
-		SendMessage(FindWindowEx(completeBox, NULL, L"Button", NULL), BM_CLICK, NULL, NULL);
 	}
 };
 }
