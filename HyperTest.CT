@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CheatTable CheatEngineTableVersion="31">
+  <CheatEntries>
+    <CheatEntry>
+      <ID>0</ID>
+      <Description>"+DBE18 Score"</Description>
+      <VariableType>Double</VariableType>
+      <Address>HyperTest.exe + DBE18</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>1</ID>
+      <Description>"+DB050 Countdown Timer"</Description>
+      <VariableType>4 Bytes</VariableType>
+      <Address>HyperTest.exe+DB050</Address>
+    </CheatEntry>
+  </CheatEntries>
+  <UserdefinedSymbols/>
+</CheatTable>

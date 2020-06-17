@@ -32,6 +32,7 @@ namespace HyperTestCrackReloaded {
 	private: System::Windows::Forms::TrackBar^  resultTrackBar;
 	private: System::Windows::Forms::Button^  patchMemBtn;
 	private: System::Windows::Forms::Button^  hookBtn;
+	private: System::ComponentModel::BackgroundWorker^  memPatch;
 	private: System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
@@ -43,6 +44,7 @@ namespace HyperTestCrackReloaded {
 			this->resultTrackBar = (gcnew System::Windows::Forms::TrackBar());
 			this->patchMemBtn = (gcnew System::Windows::Forms::Button());
 			this->hookBtn = (gcnew System::Windows::Forms::Button());
+			this->memPatch = (gcnew System::ComponentModel::BackgroundWorker());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->resultTrackBar))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -106,6 +108,10 @@ namespace HyperTestCrackReloaded {
 			this->hookBtn->UseVisualStyleBackColor = true;
 			this->hookBtn->Click += gcnew System::EventHandler(this, &MainWindow::hookBtn_Click);
 			// 
+			// memPatch
+			// 
+			this->memPatch->DoWork += gcnew System::ComponentModel::DoWorkEventHandler(this, &MainWindow::memPatch_DoWork);
+			// 
 			// MainWindow
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -132,11 +138,12 @@ namespace HyperTestCrackReloaded {
 #pragma endregion
 	private: DWORD procId = 0;
 			 uintptr_t moduleBase = 0;
-	
+			 int resultTrackBarValue;
+
 	private: System::Void hookBtn_Click(System::Object^ sender, System::EventArgs^  e) {
 		procId = MemPatcher::GetProcId(L"HyperTest.exe");
 		moduleBase = MemPatcher::GetModuleBaseAddress(procId, L"HyperTest.exe");
-		if (procId == 0 && moduleBase == 0) MessageBoxA(static_cast<HWND>(this->Handle.ToPointer()), "Unable to hook! Check if HyperTest is running", "ERROR", MB_ICONERROR | MB_OK);
+		if (procId == 0 && moduleBase == 0) MessageBoxA(0, "Unable to hook! Check if HyperTest is running", "ERROR", MB_ICONERROR | MB_OK | MB_TOPMOST);
 		else {
 			hookBtn->Enabled = false;
 			procstatusLabel->Text = "HOOKED";
@@ -145,16 +152,39 @@ namespace HyperTestCrackReloaded {
 		}
 	}
 	private: System::Void patchMemBtn_Click(System::Object^ sender, System::EventArgs^  e) {
-		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, procId);
-		uintptr_t dynamicPtrBaseAddr = moduleBase + HYPERTEST_SCORE_ADDR;
-		double newScore = resultTrackBar->Value;
-		if(WriteProcessMemory(hProcess, reinterpret_cast<LPVOID>(dynamicPtrBaseAddr), &newScore, sizeof(newScore), nullptr) != 0)
-			MessageBoxA(static_cast<HWND>(this->Handle.ToPointer()), "Memory patched! Press OK in HyperTest", "SUCCESS", MB_ICONASTERISK | MB_OK);
-		else
-			MessageBoxA(static_cast<HWND>(this->Handle.ToPointer()), "Unable to patch memory!", "ERROR", MB_ICONERROR | MB_OK);
+		resultTrackBarValue = resultTrackBar->Value;
+		if(!memPatch->IsBusy) memPatch->RunWorkerAsync();
 	}
 	private: System::Void resultTrackBar_ValueChanged(System::Object^ sender, System::EventArgs^  e) {
 		patchMemBtn->Text = "Patch mem with " + resultTrackBar->Value + "% result";
+	}
+	private: System::Void memPatch_DoWork(System::Object^  sender, System::ComponentModel::DoWorkEventArgs^  e) {
+		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, NULL, procId);
+
+		uintptr_t dynamicPtrBaseAddr = moduleBase + HYPERTEST_COUNTDOWN_ADDR;
+		int cTimer = 2;
+		if (WriteProcessMemory(hProcess, reinterpret_cast<LPVOID>(dynamicPtrBaseAddr), &cTimer, sizeof(cTimer), nullptr) == 0)
+			MessageBoxA(0, "Unable to patch memory!", "ERROR", MB_ICONERROR | MB_OK | MB_TOPMOST);
+		
+		HWND timeIsOutBox = NULL;
+		while (timeIsOutBox == NULL) {	
+			Sleep(50);
+			timeIsOutBox = FindWindowEx(NULL, NULL, L"#32770", L"Time is out");	
+		}
+		SendMessage(FindWindowEx(timeIsOutBox, NULL, L"Button", NULL), BM_CLICK, NULL, NULL);
+
+		Sleep(50);
+		dynamicPtrBaseAddr = moduleBase + HYPERTEST_SCORE_ADDR;
+		double newScore = resultTrackBarValue;
+		if (WriteProcessMemory(hProcess, reinterpret_cast<LPVOID>(dynamicPtrBaseAddr), &newScore, sizeof(newScore), nullptr) == 0)
+			MessageBoxA(0, "Unable to patch memory!", "ERROR", MB_ICONERROR | MB_OK | MB_TOPMOST);
+
+		HWND completeBox = NULL;
+		while (completeBox == NULL) {
+			Sleep(50);
+			completeBox = FindWindowEx(NULL, NULL, L"#32770", L"Результат");
+		}
+		SendMessage(FindWindowEx(completeBox, NULL, L"Button", NULL), BM_CLICK, NULL, NULL);
 	}
 };
 }
